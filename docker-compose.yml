@@ -1,0 +1,36 @@
+version: '2'
+services:
+  plex-prt-master:
+    restart: always
+    image: plex-prt-master:latest
+    container_name: plex-prt-master
+    environment:
+      - VERSION=0.9.16.6.1993-5089475
+      - PUID=1026
+      - PGID=100
+    volumes:
+      - /volume1/docker/kopfpilot/plex/config:/config
+      - /volume1/shares/movies:/media/movies
+    ports:
+      - "32400:32400"
+      # - "32400:32400/udp"
+      # - "32469:32469/udp"
+      # ports already used on DSM
+      # - "5353:5353/udp"
+      # - "1900:1900/udp"
+    build:
+      context: ./plex-prt-master
+  plex-prt-slave1:
+    restart: always
+    image: plex-prt-slave:latest
+    container_name: plex-prt-slave1
+    environment:
+      - VERSION=0.9.16.6.1993-5089475
+      - PUID=1026
+      - PGID=100
+    links:
+      - plex-prt-master:prt1
+    volumes_from:
+      - plex-prt-master:rw
+    build:
+      context: ./plex-prt-slave

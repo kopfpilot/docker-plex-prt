@@ -1,8 +1,8 @@
 #!/bin/bash -x
-_prt_folder=Plex-Remote-Transcoder
-
 [ ! -d /opt ] && mkdir -p /opt
+
 cd /opt
+_prt_folder=Plex-Remote-Transcoder
 
 # determin which prt version to checkout
 _version=$(dpkg -s plexmediaserver | grep Version | cut -c10-30)
@@ -30,7 +30,6 @@ if [ ${_use_new_prt} ]; then
   git checkout tag/0.2.2
 fi
 
-
 # install and setup PRT
 python setup.py install
 
@@ -39,7 +38,7 @@ usermod -s /bin/bash abc
 chown abc:root /config
 
 # store master ip, for clients to read 
-su abc -c "echo $(hostname -i) > ~/.prt_master_ip"
+#su abc -c "echo $(hostname -i) > ~/.prt_master_ip"
 
 su abc -c "prt install <<'_eof'
 $(hostname -i)
@@ -47,8 +46,8 @@ _eof
 "
 
 # setup ssh 
-su abc -c "ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa"
-su abc -c "cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys"
+#su abc -c "ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa"
+#su abc -c "cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys"
 
 # add master node as slave
 su abc -c "prt add_host 172.0.0.1 22 abc <<'_eof'

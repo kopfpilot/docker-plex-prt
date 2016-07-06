@@ -1,5 +1,5 @@
 #!/bin/bash -x
-_mode=master
+_mode=slave
 _prt_folder=Plex-Remote-Transcoder
 
 # fix missing shell for user abc, introduced by base docker image
